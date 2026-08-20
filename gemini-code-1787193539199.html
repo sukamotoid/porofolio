@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SUKA MOTO | Visual Storyteller</title>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,500;0,700;0,800;1,400&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', 'Segoe UI', sans-serif;
+        }
+
+        body {
+            background-color: #050505;
+            color: #fff;
+            min-height: 100vh;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            overflow-x: hidden;
+        }
+
+        /* Container Utama */
+        .app-container {
+            width: 100%;
+            max-width: 480px;
+            background: linear-gradient(rgba(0, 0, 0, 0.85), rgba(5, 5, 5, 0.98)), 
+                        url('https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80') no-repeat center center/cover;
+            background-attachment: fixed;
+            min-height: 100vh;
+            padding: 30px 20px 50px 20px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.95);
+            border-left: 1px solid rgba(255, 255, 255, 0.08);
+            border-right: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        /* HEADER & MENU GARIS TIGA (HAMBURGER) */
+        .header-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 100;
+        }
+
+        .tagline-top {
+            font-style: italic;
+            font-size: 12.5px;
+            color: #a1a1aa;
+            letter-spacing: 0.5px;
+        }
+
+        .menu-toggle-btn {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #fff;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .menu-toggle-btn:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: scale(1.05);
+        }
+
+        /* OVERLAY MENU NAVIGASI */
+        .nav-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(5, 5, 5, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            z-index: 999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .nav-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .close-menu-btn {
+            position: absolute;
+            top: 30px;
+            right: 25px;
+            background: transparent;
+            border: none;
+            color: #fff;
+            font-size: 24px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .close-menu-btn:hover {
+            transform: rotate(90deg);
+        }
+
+        .nav-links {
+            list-style: none;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            width: 80%;
+            max-width: 320px;
+        }
+
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            display: block;
+            padding: 12px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            background: #ffffff;
+            color: #000000;
+            transform: translateY(-2px);
+        }
+
+        /* Bio Card */
+        .bio-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-radius: 16px;
+            padding: 24px 20px;
+            margin-bottom: 22px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .bio-avatar {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            border: 2px solid rgba(255, 255, 255, 0.8);
+            object-fit: cover;
+            margin-bottom: 14px;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+        }
+
+        .bio-title {
+            font-size: 19px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            margin-bottom: 4px;
+            color: #ffffff;
+        }
+
+        .bio-tagline-quote {
+            font-size: 12.5px;
+            font-style: italic;
+            color: #93c5fd;
+            margin-bottom: 16px;
+            font-weight: 500;
+        }
+
+        .bio-text {
+            font-size: 13px;
+            color: #d4d4d8;
+            line-height: 1.6;
+            font-weight: 300;
+            margin-bottom: 20px;
+        }
+
+        .skills-section {
+            border-top: 1px dashed rgba(255, 255, 255, 0.15);
+            padding-top: 16px;
+        }
+
+        .skills-title {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            margin-bottom: 6px;
+            color: #f4f4f5;
+        }
+
+        .skills-intro {
+            font-size: 11.5px;
+            color: #a1a1aa;
+            margin-bottom: 14px;
+            line-height: 1.4;
+        }
+
+        .bio-badges {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            font-size: 11px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            padding: 6px 14px;
+            border-radius: 20px;
+            color: #fff;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.3s ease;
+        }
+
+        .badge:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+
+        /* Animasi Highlight Button */
+        @keyframes pulse-glow {
+            0% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.7);
+            }
+            50% {
+                transform: scale(1.02);
+                box-shadow: 0 0 22px 8px rgba(239, 68, 68, 0.7);
+            }
+            100% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(220, 38, 38, 0);
+            }
+        }
+
+        .highlight-event-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #dc2626, #991b1b);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            color: #fff;
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            border-radius: 10px;
+            text-align: center;
+            margin-bottom: 25px;
+            animation: pulse-glow 2s infinite ease-in-out;
+            transition: all 0.3s ease;
+        }
+
+        .highlight-event-btn:hover {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            transform: translateY(-2px);
+        }
+
+        /* Social Media Icons */
+        .social-text {
+            font-size: 12px;
+            font-style: italic;
+            color: #a1a1aa;
+            margin-bottom: 14px;
+            text-align: center;
+        }
+
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin-bottom: 28px;
+        }
+
+        .social-icons a {
+            width: 42px;
+            height: 42px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.03);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            text-decoration: none;
+            font-size: 17px;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .social-icons a:hover {
+            background: #ffffff;
+            color: #000000;
+            transform: translateY(-4px) scale(1.05);
+            box-shadow: 0 5px 15px rgba(255, 255, 255, 0.3);
+        }
+
+        /* Carousel Showcase */
+        .carousel-wrapper {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            border-radius: 14px;
+            overflow: hidden;
+            margin-bottom: 28px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.6);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .carousel-track {
+            display: flex;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .carousel-slide {
+            min-width: 100%;
+            height: 100%;
+        }
+
+        .carousel-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+        }
+
+        .carousel-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.5);
+            color: #fff;
+            border: none;
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(6px);
+            transition: all 0.3s;
+        }
+
+        .carousel-btn:hover { 
+            background: rgba(255, 255, 255, 0.9); 
+            color: #000;
+        }
+        .prev-btn { left: 10px; }
+        .next-btn { right: 10px; }
+
+        .carousel-dots {
+            position: absolute;
+            bottom: 12px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 6px;
+            z-index: 10;
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.4);
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .dot.active {
+            background: #fff;
+            width: 22px;
+            border-radius: 10px;
+        }
+
+        /* Pricelist & Paket */
+        .pricelist-section {
+            text-align: center;
+        }
+
+        .section-title {
+            font-size: 13px;
+            letter-spacing: 2px;
+            font-weight: 800;
+            margin-bottom: 20px;
+            color: #ffffff;
+            text-transform: uppercase;
+        }
+
+        .btn-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .paket-btn {
+            display: block;
+            width: 100%;
+            padding: 14px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #fff;
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            border-radius: 10px;
+            text-align: center;
+            backdrop-filter: blur(5px);
+            transition: all 0.3s ease;
+        }
+
+        .paket-btn:hover {
+            background: #ffffff;
+            color: #000000;
+            border-color: #ffffff;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 255, 255, 0.2);
+        }
+
+        /* Add-On Section */
+        .addon-container {
+            margin-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.12);
+            padding-top: 22px;
+        }
+
+        .addon-title {
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            margin-bottom: 14px;
+            color: #e4e4e7;
+        }
+
+        .addon-links {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            font-size: 12px;
+        }
+
+        .addon-links a {
+            color: #a1a1aa;
+            text-decoration: none;
+            letter-spacing: 1px;
+            transition: color 0.2s ease;
+        }
+
+        .addon-links a:hover { color: #ffffff; }
+
+        .all-package {
+            color: #ffffff !important;
+            font-weight: 800;
+            margin-top: 6px;
+            letter-spacing: 1.5px !important;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="app-container">
+        <!-- HEADER DENGAN NAVIGASI GARIS TIGA -->
+        <header class="header-nav">
+            <div class="tagline-top">Visual Storyteller | Portrait & Editorial</div>
+            <button class="menu-toggle-btn" id="openMenuBtn" aria-label="Open Navigation">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+        </header>
+
+        <!-- OVERLAY MENU (POP-UP NAVIGASI) -->
+        <div class="nav-overlay" id="navOverlay">
+            <button class="close-menu-btn" id="closeMenuBtn" aria-label="Close Navigation">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <ul class="nav-links">
+                <li><a href="#"><i class="fa-solid fa-house"></i> Home</a></li>
+                <li><a href="#pricelist"><i class="fa-solid fa-camera"></i> Pricelist Paket</a></li>
+                <li><a href="https://instagram.com/sukaamotoo" target="_blank"><i class="fa-brands fa-instagram"></i> Portofolio IG</a></li>
+                <li><a href="https://wa.me/6285156918852" target="_blank"><i class="fa-brands fa-whatsapp"></i> Hubungi Kami</a></li>
+            </ul>
+        </div>
+
+        <!-- BIO CARD -->
+        <div class="bio-card">
+            <img src="https://lh3.googleusercontent.com/d/1J_VXtKJJunPDGJzlGz2INuW_MqaKWbWb" alt="SUKA MOTO" class="bio-avatar">
+            
+            <div class="bio-title">SUKA MOTO</div>
+            <div class="bio-tagline-quote">"Turning moments into memories"</div>
+            <p class="bio-text">
+                Saya percaya bahwa setiap orang memiliki cerita yang layak diabadikan. Dengan sentuhan personal dan fokus pada detail, saya membantu Anda menyimpan momen spesial, tawa, dan kehangatan dalam gambar yang akan Anda hargai selamanya.
+            </p>
+
+            <div class="skills-section">
+                <div class="skills-title">Kemahiran Saya</div>
+                <div class="skills-intro">Saya seorang Freelancer Photographer berpengalaman dan meminati bidang berikut:</div>
+                <div class="bio-badges">
+                    <span class="badge"><i class="fa-solid fa-camera"></i> Photoshoot</span>
+                    <span class="badge"><i class="fa-solid fa-clapperboard"></i> Video Cinematic</span>
+                    <span class="badge"><i class="fa-solid fa-sliders"></i> Editing</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- HIGHLIGHT EVENT BUTTON -->
+        <a href="https://www.sukamoto.web.id/package/event" class="highlight-event-btn">
+            <i class="fa-solid fa-flag"></i> FOTO SPESIAL KEMERDEKAAN
+        </a>
+
+        <!-- SOSIAL MEDIA -->
+        <div class="social-text">our official social media accounts</div>
+        <div class="social-icons">
+            <a href="https://instagram.com/sukaamotoo" target="_blank" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
+            <a href="https://wa.me/6285156918852" target="_blank" title="WhatsApp"><i class="fa-solid fa-phone"></i></a>
+            <a href="https://facebook.com" target="_blank" title="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+            <a href="https://youtube.com" target="_blank" title="YouTube"><i class="fa-brands fa-youtube"></i></a>
+        </div>
+
+        <!-- AUTO CAROUSEL SHOWCASE -->
+        <div class="carousel-wrapper">
+            <button class="carousel-btn prev-btn" onclick="moveSlide(-1)"><i class="fa-solid fa-chevron-left"></i></button>
+            
+            <div class="carousel-track" id="carouselTrack">
+                <div class="carousel-slide"><img src="https://lh3.googleusercontent.com/d/1J_VXtKJJunPDGJzlGz2INuW_MqaKWbWb" alt="Showcase 1"></div>
+                <div class="carousel-slide"><img src="https://lh3.googleusercontent.com/d/1Sa80xWGmbv-E5J2U1llmJQP7wFuV8OL-" alt="Showcase 2"></div>
+                <div class="carousel-slide"><img src="https://lh3.googleusercontent.com/d/1KpTl316uDve1EAgPEYmAxV6CXYCpM2Vh" alt="Showcase 3"></div>
+                <div class="carousel-slide"><img src="https://lh3.googleusercontent.com/d/1JQfPzYvHTVhzi2Xwjaj67krX0Z93AnL8" alt="Showcase 4"></div>
+                <div class="carousel-slide"><img src="https://lh3.googleusercontent.com/d/1W5ut1xj5McpXDncfxJB_DsTBdJBwmAP2" alt="Showcase 5"></div>
+            </div>
+
+            <button class="carousel-btn next-btn" onclick="moveSlide(1)"><i class="fa-solid fa-chevron-right"></i></button>
+            
+            <div class="carousel-dots" id="carouselDots">
+                <div class="dot active" onclick="currentSlide(0)"></div>
+                <div class="dot" onclick="currentSlide(1)"></div>
+                <div class="dot" onclick="currentSlide(2)"></div>
+                <div class="dot" onclick="currentSlide(3)"></div>
+                <div class="dot" onclick="currentSlide(4)"></div>
+            </div>
+        </div>
+
+        <!-- PILIHAN PAKET & PRICELIST -->
+        <div class="pricelist-section" id="pricelist">
+            <div class="section-title">PILIHAN PAKET & PRICELIST</div>
+            <div class="btn-list">
+                <a href="https://www.sukamoto.web.id/package/graduates" class="paket-btn">GRADUATES</a>
+                <a href="https://www.sukamoto.web.id/package/wedding" class="paket-btn">WEDDING</a>
+                <a href="https://www.sukamoto.web.id/package/prewedding" class="paket-btn">PREWEDDING</a>
+                <a href="https://www.sukamoto.web.id/package/engagement" class="paket-btn">ENGAGEMENT</a>
+                <a href="https://www.sukamoto.web.id/package/event" class="paket-btn">EVENT</a>
+                <a href="https://www.sukamoto.web.id/package/birthday" class="paket-btn">BIRTHDAY</a>
+                <a href="https://www.sukamoto.web.id/package/pas-foto" class="paket-btn">PAS FOTO</a>
+            </div>
+
+            <!-- BAGIAN ADD ON -->
+            <div class="addon-container">
+                <div class="addon-title">ADD ON</div>
+                <div class="addon-links">
+                    <a href="https://wa.me/6285156918852?text=Halo%20SUKA%20MOTO,%20saya%20mau%20tanya%20layanan%20Add%20On%20WCC" target="_blank">WCC</a>
+                    <a href="https://wa.me/6285156918852?text=Halo%20SUKA%20MOTO,%20saya%20mau%20tanya%20layanan%20Add%20On%20MC" target="_blank">MC</a>
+                    <a href="https://wa.me/6285156918852?text=Halo%20SUKA%20MOTO,%20saya%20mau%20tanya%20layanan%20Add%20On%20WO" target="_blank">WO</a>
+                    <a href="https://wa.me/6285156918852?text=Halo%20SUKA%20MOTO,%20saya%20mau%20tanya%20informasi%20All%20Package" target="_blank" class="all-package">ALL PACKAGE</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SCRIPT NAVIGASI, CAROUSEL, & TOUCH SWIPE -->
+    <script>
+        /* LOGIKA MENU HAMBURGER */
+        const openMenuBtn = document.getElementById('openMenuBtn');
+        const closeMenuBtn = document.getElementById('closeMenuBtn');
+        const navOverlay = document.getElementById('navOverlay');
+        const navLinks = document.querySelectorAll('.nav-links a');
+
+        openMenuBtn.addEventListener('click', () => {
+            navOverlay.classList.add('active');
+        });
+
+        closeMenuBtn.addEventListener('click', () => {
+            navOverlay.classList.remove('active');
+        });
+
+        // Tutup menu saat salah satu link diklik
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                navOverlay.classList.remove('active');
+            });
+        });
+
+        /* LOGIKA CAROUSEL SHOWCASE */
+        let index = 0;
+        const slides = document.querySelectorAll('.carousel-slide');
+        const track = document.getElementById('carouselTrack');
+        const dots = document.querySelectorAll('.dot');
+        const totalSlides = slides.length;
+        let autoSlideTimer;
+
+        function updateCarousel() {
+            track.style.transform = `translateX(-${index * 100}%)`;
+            dots.forEach((dot, i) => {
+                dot.classList.toggle('active', i === index);
+            });
+        }
+
+        function moveSlide(step) {
+            index = (index + step + totalSlides) % totalSlides;
+            updateCarousel();
+            resetTimer();
+        }
+
+        function currentSlide(slideIndex) {
+            index = slideIndex;
+            updateCarousel();
+            resetTimer();
+        }
+
+        function startAutoSlide() {
+            autoSlideTimer = setInterval(() => {
+                index = (index + 1) % totalSlides;
+                updateCarousel();
+            }, 3500);
+        }
+
+        function resetTimer() {
+            clearInterval(autoSlideTimer);
+            startAutoSlide();
+        }
+
+        /* Support Touch / Swipe di Smartphone */
+        let startX = 0;
+        let endX = 0;
+        const carouselWrapper = document.querySelector('.carousel-wrapper');
+
+        carouselWrapper.addEventListener('touchstart', (e) => {
+            startX = e.touches[0].clientX;
+        });
+
+        carouselWrapper.addEventListener('touchend', (e) => {
+            endX = e.changedTouches[0].clientX;
+            if (startX - endX > 40) {
+                moveSlide(1);
+            } else if (endX - startX > 40) {
+                moveSlide(-1);
+            }
+        });
+
+        startAutoSlide();
+    </script>
+
+</body>
+</html>
